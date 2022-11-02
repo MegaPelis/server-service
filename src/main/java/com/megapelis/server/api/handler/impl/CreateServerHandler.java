@@ -5,7 +5,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.megapelis.server.api.handler.ServerGenericCommon;
 import com.megapelis.server.api.handler.ServerHandler;
 import com.megapelis.server.model.dto.request.CreateRQ;
 import com.megapelis.server.model.dto.request.generic.Request;
@@ -41,8 +40,8 @@ public class CreateServerHandler extends ServerHandler implements RequestHandler
     @Override
     public Object validatePayload(Request request) throws ServerException {
         CreateRQ createRQ = convertPayload(request, CreateRQ.class);
-//        if (!ServerCommon.isValidString(createRQ.getIdServer()))
-//            throw new ServerException(ServerStatusEnum.ERROR_FORMAT_REQUEST);
+        if (!ServerCommon.isValidString(createRQ.getName(), createRQ.getImageBase64()))
+            throw new ServerException(ServerStatusEnum.ERROR_FORMAT_REQUEST);
         return createRQ;
     }
 
@@ -51,9 +50,9 @@ public class CreateServerHandler extends ServerHandler implements RequestHandler
         db = AmazonDynamoDBClientBuilder.defaultClient();
         mapper = new DynamoDBMapper(db);
         Server server = ServerCommon.convertObjectToClass(request.getData(), Server.class);
-        server.setStatus(Status.ACTIVE);
+        server.setStatus(Status.ACTIVE.toString());
         server.setCreatedDate(ServerCommon.getDateTime());
-        server.setLastModifiedDate(ServerCommon.getDateTime());
+        server.setLastModifiedDate(null);
         mapper.save(server);
         return ServerCommon.buildResponse(request, ServerStatusEnum.SUCCESS);
     }

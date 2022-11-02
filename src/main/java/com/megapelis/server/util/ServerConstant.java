@@ -12,4 +12,6 @@ public class ServerConstant {
     // Fecha
     public static final String STRING_DATE_ZONE = "America/Bogota";
     public static final String STRING_DATE_TIME_FORMAT = "yyyy/MM/dd hh:mm:ss";
+
+    public static final String TABLA_NAME_SERVER = "server";
 }
