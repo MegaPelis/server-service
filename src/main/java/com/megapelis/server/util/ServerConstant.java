@@ -7,6 +7,8 @@ public class ServerConstant {
     public static final boolean BOOLEAN_TRUE = true;
     public static final boolean BOOLEAN_FALSE = false;
 
+    public static final int INTEGER_ONE = 1;
+
     // SERVICIO
     public static final String STRING_SERVICE_NAME = "Server";
     // Fecha

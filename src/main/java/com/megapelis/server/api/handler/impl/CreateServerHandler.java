@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.megapelis.server.api.handler.ServerHandler;
-import com.megapelis.server.model.dto.request.CreateRQ;
+import com.megapelis.server.model.dto.request.CreateServerRQ;
 import com.megapelis.server.model.dto.request.generic.Request;
 import com.megapelis.server.model.dto.response.Response;
 import com.megapelis.server.model.entity.Server;
@@ -27,7 +27,14 @@ public class CreateServerHandler extends ServerHandler implements RequestHandler
 
     @Override
     public Response execute(Request request) {
-        return handleRequest(request, null);
+        Response response;
+        try {
+            Object object = validatePayload(request);
+            response = handleRequest(request, null);
+        } catch (ServerException exception) {
+            response = ServerCommon.buildResponse(request, exception.getStatus());
+        }
+        return response;
     }
 
     /**
@@ -39,10 +46,10 @@ public class CreateServerHandler extends ServerHandler implements RequestHandler
      */
     @Override
     public Object validatePayload(Request request) throws ServerException {
-        CreateRQ createRQ = convertPayload(request, CreateRQ.class);
-        if (!ServerCommon.isValidString(createRQ.getName(), createRQ.getImageBase64()))
+        CreateServerRQ createServerRQ = convertPayload(request, CreateServerRQ.class);
+        if (!ServerCommon.isValidString(createServerRQ.getName(), createServerRQ.getImageBase64()))
             throw new ServerException(ServerStatusEnum.ERROR_FORMAT_REQUEST);
-        return createRQ;
+        return createServerRQ;
     }
 
     @Override
