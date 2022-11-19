@@ -18,7 +18,6 @@ public abstract class ServerHandler extends ServerGenericCommon  {
         try {
             Object object = validatePayload(request);
 
-
             response = ServerCommon.buildResponse(request, ServerStatusEnum.SUCCESS);
         } catch (ServerException exception) {
             response = ServerCommon.buildResponse(request, exception.getStatus());
